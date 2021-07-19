@@ -1,6 +1,8 @@
 //game_of_life.java = Conway's Game of Life
 
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Collections;
 
 class GameOfLife {
     public static void main(String[] args) throws java.io.IOException
@@ -37,13 +39,36 @@ class GameOfLife {
         }
     }
 
-    static int makeRandomGrid(boolean[][] w, int aliveCnt) {
-        // need to determine best way to choose random alive cells
-        // make an array of length gridSize*gridSize
-        // with values 0, gridSize*gridSize - 1
-        // then shuffle the array and take the first aliveCnt elements
-        // then translate these numbers to positions in w
-        for (int i = 0; i < aliveCnt
+    static void makeRandomGrid(boolean[][] w, int aliveCnt) {
+        int m = w.length;
+        int n = w[0].length;
+        // set all cells empty
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                w[i][j] = EMPTY;
+            }
+        }
+        // pick aliveCnt random cells to set empty
+        ArrayList<Integer> slots = new ArrayList<Integer>();
+        for (int i = 0; i < m * n; i++) {
+            slots.add(i);
+        }
+        Collections.shuffle(slots);
+        int row, col, idx;
+        for (int i = 0; i < aliveCnt; i++) {
+            idx = slots.get(i);
+            row = idx / m;
+            col = idx % n;
+            w[row][col] = ALIVE;
+        }
+        System.out.println("This is your grid.");
+        printState(w);
+        //set border cells to be empty
+        int border = w.length - 1;
+        for (int i = 0; i < w.length; i++) {
+            w[i][0] = w[0][i] = EMPTY;
+            w[i][border] = w[border][i] = EMPTY;
+        }
     }
 
     static int getAliveCntFromUser(Scanner scan, int gridSize) {
@@ -63,7 +88,7 @@ class GameOfLife {
         return aliveCnt;
     }
 
-    static int getSizesFromUser(Scanner scan) {
+    static int getSizeFromUser(Scanner scan) {
         int gridSize, aliveCnt;
         System.out.println("Welcome to Game of Life!");
         System.out.println("What size grid will you be playing with?");
