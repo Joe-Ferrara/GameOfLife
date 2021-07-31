@@ -26,7 +26,8 @@ class GameOfLife {
             readInitialGeneration(currentGeneration);
         }
         // read in the number of generations to simulate
-        int cycles = 4; // fix at 4 for testing
+        int cycles;
+        cycles = askNumberRounds(scan);
         printState(currentGeneration);
         for (int i = 0; i < cycles; i++) {
             System.out.println("Cycle = " + i + "\n\n");
@@ -95,6 +96,23 @@ class GameOfLife {
         System.out.println("(type an integer and then press enter)");
         gridSize = scan.nextInt();
         return gridSize;
+    }
+
+    static int askNumberRounds(Scanner scan) {
+        System.out.println("How many rounds do you want to play?");
+        System.out.println("(type an integer and then press enter)");
+        boolean done = false;
+        int r = 0;
+        while (! done) {
+            if (scan.hasNextInt()) {
+                r = scan.nextInt();
+                done = true;
+            }
+            else {
+                System.out.println("You did not enter an integer! Try again.");
+            }
+        }
+        return r;
     }
 
     static boolean askPlayType(Scanner scan) {
